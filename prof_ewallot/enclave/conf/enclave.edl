@@ -1,0 +1,23 @@
+/* Enclave.edl - Top EDL file. */
+
+enclave {
+    
+    /* 
+     * ocall_EncExample_sample - invokes OCALL to display string buffer inside the enclave.
+     *  [in]: copy the string buffer to App outside.
+     *  [string]: specifies 'str' is a NULL terminated buffer.
+     */
+    untrusted {
+	int ocall_save_wallet( const uint8_t* sealed_data, size_t sealed_size);
+        int ocall_load_wallet( uint8_t* sealed_data, size_t sealed_size);
+        int ocall_is_wallet(void); 
+    };
+
+    trusted {
+	public int ecall_generate_password( char *p_value, size_t p_length);
+        public int ecall_create_wallet( const char* master_password);
+        public int ecall_change_master_password( const char* old_password,  const char* new_password);
+        public int ecall_add_item( const char* master_password,  const item_t* item, size_t item_size);
+        public int ecall_remove_item( const char* master_password, int index);  
+    };
+};
