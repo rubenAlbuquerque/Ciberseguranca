@@ -7,19 +7,18 @@
 #include "config.h"
 #include "app.h"
 
-int SGX_CDECL main(int argc, char** argv) {  //diff
+int SGX_CDECL main(int argc, char** argv) {
 
-	(void)(argc);  //diff
-	(void)(argv);  //diff
+	(void)(argc);
+	(void)(argv);
 
-
-	int r;  //diff
-	int reto;  //diff
-	sgx_status_t ret = SGX_ERROR_UNEXPECTED;  //diff
+	int r;
+	int reto;
+	sgx_status_t ret = SGX_ERROR_UNEXPECTED;
     
 	/* Call sgx_create_enclave to initialize an enclave instance */
 	/* Debug Support: set 2nd parameter to 1 */
-	ret = sgx_create_enclave( ENCLAVE_FILENAME, SGX_DEBUG_FLAG, NULL, NULL, &global_eid, NULL) ;   //diff
+	ret = sgx_create_enclave( ENCLAVE_FILENAME, SGX_DEBUG_FLAG, NULL, NULL, &global_eid, NULL) ;
 	if ( ret != SGX_SUCCESS ) {
 		print_error_message( ret );
 		return -1;
@@ -240,14 +239,14 @@ void show_help() {
 }
 
 
-// int generate_password(char *p_value, int p_length)  //diff
+
 
 
 int create_wallet(sgx_enclave_id_t global_eid, int* r, const char* master_password) {
 
-	int reto;  //diff
-	sgx_status_t ret;  //diff
-	uint8_t swallet;  //diff
+	int reto;
+	sgx_status_t ret;
+	uint8_t swallet; 	
 
 
 	// check password policy
@@ -256,12 +255,12 @@ int create_wallet(sgx_enclave_id_t global_eid, int* r, const char* master_passwo
 	}
 
 	// abort if wallet already exist
-	reto = is_wallet();  //diff
+	reto = is_wallet();
 	if (reto == 0) {
 		return ERR_WALLET_ALREADY_EXISTS;
 	}
 
-	//ecall   //diff
+	//ecall
 	ret = ecall_create_wallet(global_eid, r, &swallet, master_password);
 	if (ret != RET_SUCCESS) {
 		return ret;
@@ -281,19 +280,19 @@ int create_wallet(sgx_enclave_id_t global_eid, int* r, const char* master_passwo
 int show_wallet(sgx_enclave_id_t global_eid, int* r,const char* master_password) {
 
 	int reto;
-	sgx_status_t ret;   //diff
+	sgx_status_t ret;
 	
 
 	// load wallet
-	uint8_t* wallet = (uint8_t*)malloc(sealed_size);  //diff
+	uint8_t* wallet = (uint8_t*)malloc(sealed_size);
 	reto = load_wallet(wallet, sealed_size);
 	if (reto != 0) {
-		free(wallet);							  //diff
+		free(wallet);
 		return ERR_CANNOT_LOAD_WALLET;
 	}
 
 	//ecall
-	ret = ecall_show_wallet(global_eid, r, &wallet, master_password);   //diff
+	ret = ecall_show_wallet(global_eid, r, &wallet, master_password);
 	if (ret != RET_SUCCESS) {
 		free(swallet);
 		return ret;
@@ -418,6 +417,8 @@ int remove_item(sgx_enclave_id_t global_eid, int* r, const char* master_password
 	// exit
 	return RET_SUCCESS;
 }
+
+
 
 
 int save_wallet(const uint8_t* wallet, const size_t wallet_size) {
